@@ -4,8 +4,15 @@ import { useState, useEffect } from "react";
 import { useActionState } from "react";
 import { useRouter } from "next/navigation";
 import { addNewComment } from "../actions/actions";
+import { User } from "@supabase/supabase-js";
 
-export default function AddNewCommentForm({ postId }: { postId: number }) {
+export default function AddNewCommentForm({
+  postId,
+  user,
+}: {
+  postId: number;
+  user: User | null;
+}) {
   const [state, formAction, isPending] = useActionState(addNewComment, null);
   const [content, setContent] = useState("");
   const router = useRouter();
@@ -18,7 +25,13 @@ export default function AddNewCommentForm({ postId }: { postId: number }) {
   }, [state, router]);
 
   return (
-    <form action={formAction} className="mb-6">
+    <form action={formAction} className="mb-4 ">
+      {state?.status === "failure" && (
+        <p className="text-sm text-red-600 mt-2">{state.message}</p>
+      )}
+      {state?.status === "success" && (
+        <p className="text-sm text-green-600 mt-2">{state.message}</p>
+      )}
       <input type="hidden" name="post_id" value={postId} />
 
       <input
@@ -35,17 +48,10 @@ export default function AddNewCommentForm({ postId }: { postId: number }) {
       <button
         type="submit"
         disabled={isPending}
-        className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 disabled:opacity-50"
+        className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 disabled:opacity-50 hover:cursor-pointer"
       >
         {isPending ? "Posting..." : "Post Comment"}
       </button>
-
-      {state?.status === "failure" && (
-        <p className="text-sm text-red-600 mt-2">{state.message}</p>
-      )}
-      {state?.status === "success" && (
-        <p className="text-sm text-green-600 mt-2">{state.message}</p>
-      )}
     </form>
   );
 }

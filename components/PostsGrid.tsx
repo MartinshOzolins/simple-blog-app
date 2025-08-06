@@ -14,7 +14,7 @@ export default function PostGrid({ posts }: { posts: Post[] }) {
   const [category, setCategory] = useState(
     () => searchParams.get("category") || ""
   );
-  console.log(posts);
+
   useEffect(() => {
     const timeout = setTimeout(() => {
       const params = new URLSearchParams();

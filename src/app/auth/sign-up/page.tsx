@@ -13,20 +13,19 @@ export default function Page() {
   const [errorMsg, setErrorMsg] = useState("");
   const [message, setMessage] = useState("");
 
-  const handleLogin = async () => {
+  const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     setErrorMsg("");
+    setMessage("");
 
     const { data, error } = await supabaseBrowserClient.auth.signUp({
       email,
       password,
       options: {
-        data: {
-          name: name,
-          surname: surname,
-        },
+        data: { name, surname },
       },
     });
-    console.log(name, surname, data.user);
+
     if (error) {
       if (error.message.toLowerCase().includes("confirm")) {
         setErrorMsg("Please confirm your email before logging in.");
@@ -44,7 +43,7 @@ export default function Page() {
             setErrorMsg("Please verify your email address to log in.");
             break;
           case "too_many_requests":
-            setErrorMsg("Too many login attempts. Please wait and try again.");
+            setErrorMsg("Too many attempts. Please wait and try again.");
             break;
           default:
             setErrorMsg("Something went wrong. Please try again.");
@@ -55,7 +54,6 @@ export default function Page() {
       setMessage(
         "Registration was successful. Please confirm your email before logging in."
       );
-
       await supabaseBrowserClient.auth.signOut();
     }
   };
@@ -64,58 +62,68 @@ export default function Page() {
     <div className="mx-auto mt-20 max-w-md p-6">
       <h1 className="mb-6 text-2xl font-bold">Sign Up</h1>
 
-      <label htmlFor="name">First Name</label>
-      <input
-        id="name"
-        type="text"
-        className="mb-4 w-full rounded border border-gray-300 p-2"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
+      <form onSubmit={handleSignUp}>
+        <label htmlFor="name">First Name</label>
+        <input
+          id="name"
+          type="text"
+          className="mb-4 w-full rounded border border-gray-300 p-2"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
 
-      <label htmlFor="surname">Last Name</label>
-      <input
-        id="surname"
-        type="text"
-        className="mb-4 w-full rounded border border-gray-300 p-2"
-        value={surname}
-        onChange={(e) => setSurname(e.target.value)}
-      />
+        <label htmlFor="surname">Last Name</label>
+        <input
+          id="surname"
+          type="text"
+          className="mb-4 w-full rounded border border-gray-300 p-2"
+          value={surname}
+          onChange={(e) => setSurname(e.target.value)}
+        />
 
-      <label htmlFor="email">Email</label>
-      <input
-        id="email"
-        type="email"
-        className="mb-4 w-full rounded border border-gray-300 p-2"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
+        <label htmlFor="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          className="mb-4 w-full rounded border border-gray-300 p-2"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
-      <label htmlFor="password">Password</label>
-      <input
-        id="password"
-        type="password"
-        className="mb-4 w-full rounded border border-gray-300 p-2"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+        <label htmlFor="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          className="mb-4 w-full rounded border border-gray-300 p-2"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
 
-      <button
-        onClick={handleLogin}
-        className="w-full rounded bg-gray-600 p-2 text-white hover:bg-gray-700 hover:cursor-pointer"
-      >
-        Sign Up
-      </button>
+        <button
+          type="submit"
+          className="w-full rounded bg-gray-600 p-2 text-white hover:bg-gray-700 hover:cursor-pointer"
+        >
+          Sign Up
+        </button>
+      </form>
+
+      <p className="mt-6 text-center text-sm text-gray-700">
+        Already have an account?{" "}
+        <Link href="/auth/sign-in" className="hover:underline">
+          Sign in
+        </Link>
+      </p>
 
       {errorMsg && (
         <p className="mt-4 text-center text-sm text-red-600">{errorMsg}</p>
       )}
+
       {message && (
         <>
           <p className="mt-4 text-center text-sm text-green-600">{message}</p>
           <Link
-            href={"/sign-in"}
-            className="block text-center text-blue-600 underline mt-2"
+            href="/auth/sign-in"
+            className="block text-center text-gray-700 underline mt-2"
           >
             Go to Sign In
           </Link>

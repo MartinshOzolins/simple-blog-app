@@ -14,27 +14,34 @@ export default function CreatePostForm() {
 
   useEffect(() => {
     if (state?.status === "success") {
-      setTimeout(() => {
-        router.push("/");
-      }, 2500);
-    } else if (state?.status === "failure") {
       setTitle("");
       setContent("");
       setCategories("");
+      router.push("/");
     }
   }, [state, router]);
 
   return (
-    <div className="max-w-2xl mx-auto mt-10 flex flex-col items-center">
+    <div className="max-w-2xl mx-auto mt-8">
       {state?.status === "success" && (
-        <p className="mb-4 text-green-600 font-large">{state.message}</p>
+        <p className="mb-4 text-green-600 font-medium">{state.message}</p>
       )}
       {state?.status === "failure" && (
-        <p className="mb-4 text-green-600 font-large">{state.message}</p>
+        <p className="mb-4 text-red-600 font-medium">{state.message}</p>
       )}
 
-      <form action={formAction}>
+      <form
+        action={formAction}
+        className="bg-white shadow border border-gray-200 p-6 rounded"
+      >
+        <label
+          htmlFor="title"
+          className="block text-sm font-medium text-gray-700 mb-1"
+        >
+          Title
+        </label>
         <input
+          id="title"
           name="title"
           type="text"
           placeholder="Post Title"
@@ -44,7 +51,14 @@ export default function CreatePostForm() {
           required
         />
 
+        <label
+          htmlFor="content"
+          className="block text-sm font-medium text-gray-700 mb-1"
+        >
+          Content
+        </label>
         <textarea
+          id="content"
           name="content"
           placeholder="Post Content"
           value={content}
@@ -53,22 +67,31 @@ export default function CreatePostForm() {
           required
         />
 
+        <label
+          htmlFor="categories"
+          className="block text-sm font-medium text-gray-700 mb-1"
+        >
+          Categories
+        </label>
         <input
+          id="categories"
           name="categories"
           type="text"
           placeholder="Categories (comma separated)"
           value={categories}
           onChange={(e) => setCategories(e.target.value)}
-          className="w-full border border-gray-300 rounded px-4 py-2 mb-4"
+          className="w-full border border-gray-300 rounded px-4 py-2 mb-6"
         />
 
-        <button
-          type="submit"
-          disabled={isPending}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
-        >
-          {isPending ? "Publishing..." : "Publish"}
-        </button>
+        <div className="flex justify-start">
+          <button
+            type="submit"
+            disabled={isPending}
+            className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-800 disabled:opacity-50"
+          >
+            {isPending ? "Publishing..." : "Publish"}
+          </button>
+        </div>
       </form>
     </div>
   );

@@ -6,7 +6,7 @@ import { createClient } from "../config/supabaseServerClient";
 export async function createPost(
   currState: { status: string; message: string } | null,
   formData: FormData
-) {
+): Promise<{ status: string; message: string }> {
   const title = formData.get("title");
   const content = formData.get("content");
   const categories = formData.get("categories");
@@ -76,7 +76,7 @@ export async function createPost(
 export async function editPost(
   currState: { status: string; message: string } | null,
   formData: FormData
-) {
+): Promise<{ status: string; message: string }> {
   const title = formData.get("title");
   const content = formData.get("content");
   const categories = formData.get("categories");
@@ -146,10 +146,61 @@ export async function editPost(
   };
 }
 
+export async function deletePost(
+  prevState: { status: string; message: string } | null,
+  formData: FormData
+): Promise<{ status: string; message: string }> {
+  const postId = formData.get("post_id");
+
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return {
+      status: "failure",
+      message: "You must be logged in to delete a post.",
+    };
+  }
+
+  const { data: post, error: fetchError } = await supabase
+    .from("posts")
+    .select("id")
+    .eq("id", postId)
+    .eq("author_id", user.id)
+    .single();
+
+  if (fetchError || !post) {
+    return {
+      status: "failure",
+      message: "Post not found or you don't have permission to delete it.",
+    };
+  }
+
+  const { error: deleteError } = await supabase
+    .from("posts")
+    .delete()
+    .eq("id", postId);
+
+  if (deleteError) {
+    return {
+      status: "failure",
+      message: "Failed to delete the post.",
+    };
+  }
+
+  return {
+    status: "success",
+    message: "The post has been successfully deleted.",
+  };
+}
+
 export async function addNewComment(
   currState: { status: string; message: string } | null,
   formData: FormData
-) {
+): Promise<{ status: string; message: string }> {
   const content = formData.get("content");
   const postId = formData.get("post_id");
 
@@ -202,5 +253,85 @@ export async function addNewComment(
   return {
     status: "success",
     message: "The comment has been successfully added.",
+  };
+}
+
+export async function editComment(
+  commentId: number,
+  content: string
+): Promise<{ status: string; message: string }> {
+  const trimmedContent = validator.trim(String(content));
+
+  if (!validator.isLength(trimmedContent, { min: 2, max: 300 })) {
+    return {
+      status: "failure",
+      message: "Content must be between 2 and 300 characters.",
+    };
+  }
+
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return {
+      status: "failure",
+      message: "You must be logged in to update a comment.",
+    };
+  }
+
+  const { error } = await supabase
+    .from("comments")
+    .update({ content: trimmedContent })
+    .eq("id", commentId)
+    .eq("author_id", user.id);
+
+  if (error) {
+    return {
+      status: "failure",
+      message: "Failed to update the comment.",
+    };
+  }
+
+  return {
+    status: "success",
+    message: "Comment updated successfully.",
+  };
+}
+
+export async function deleteComment(
+  commentId: number
+): Promise<{ status: string; message: string }> {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return {
+      status: "failure",
+      message: "You must be logged in to update a comment.",
+    };
+  }
+
+  const { error } = await supabase
+    .from("comments")
+    .delete()
+    .eq("id", commentId)
+    .eq("author_id", user.id);
+
+  if (error) {
+    return {
+      status: "failure",
+      message: "Failed to delete the comment.",
+    };
+  }
+
+  return {
+    status: "success",
+    message: "Comment deleted successfully.",
   };
 }

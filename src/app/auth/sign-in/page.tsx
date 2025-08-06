@@ -3,17 +3,17 @@
 import { useState } from "react";
 import { supabaseBrowserClient } from "../../../../config/supabaseBrowserClient";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function Page() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  // logical states
   const [errorMsg, setErrorMsg] = useState("");
 
   const router = useRouter();
 
-  const handleLogin = async () => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault(); // Prevent default form submit
     setErrorMsg("");
 
     const { error } = await supabaseBrowserClient.auth.signInWithPassword({
@@ -54,34 +54,43 @@ export default function Page() {
     <div className="mx-auto mt-20 max-w-md p-6">
       <h1 className="mb-6 text-2xl font-bold">Sign In</h1>
 
-      <label htmlFor="email">Email</label>
-      <input
-        id="email"
-        type="email"
-        className="mb-4 w-full rounded border border-gray-300 p-2"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
+      <form onSubmit={handleLogin}>
+        <label htmlFor="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          className="mb-4 w-full rounded border border-gray-300 p-2"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
-      <label htmlFor="password">Password</label>
-      <input
-        id="password"
-        type="password"
-        className="mb-4 w-full rounded border border-gray-300 p-2"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+        <label htmlFor="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          className="mb-4 w-full rounded border border-gray-300 p-2"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
 
-      <button
-        onClick={handleLogin}
-        className="w-full rounded bg-gray-600 p-2 text-white hover:bg-gray-700 hover:cursor-pointer"
-      >
-        Sign In
-      </button>
+        <button
+          type="submit"
+          className="w-full rounded bg-gray-600 p-2 text-white hover:bg-gray-700 hover:cursor-pointer"
+        >
+          Sign In
+        </button>
+      </form>
 
       {errorMsg && (
         <p className="mt-4 text-center text-sm text-red-600">{errorMsg}</p>
       )}
+
+      <p className="mt-6 text-center text-sm text-gray-700">
+        Don&apos;t have an account?{" "}
+        <Link href="/auth/sign-up" className="hover:underline">
+          Sign up
+        </Link>
+      </p>
     </div>
   );
 }

@@ -39,6 +39,7 @@ export default async function EditPostPage({
       <PostInformation
         postId={post.id}
         title={post.title}
+        authorId={post.author_id}
         content={post.content}
         categories={post.categories}
         name={post.name}

@@ -1,12 +1,19 @@
+"use client";
+
+import { useState } from "react";
 import { User } from "@supabase/supabase-js";
 import { Comment } from "../types";
 import AddNewCommentForm from "./AddNewCommentForm";
+import { deleteComment, editComment } from "../actions/actions";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function PostInformation({
   postId,
   title,
   content,
   categories,
+  authorId,
   name,
   surname,
   comments,
@@ -16,15 +23,47 @@ export default function PostInformation({
   title: string;
   content: string;
   categories?: string;
+  authorId: string;
   name?: string;
   surname?: string;
   comments: Comment[];
   user: User | null;
 }) {
+  const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
+  const [editedContent, setEditedContent] = useState("");
+
+  const router = useRouter();
+
+  const handleStartEdit = (comment: Comment) => {
+    setEditingCommentId(comment.id);
+    setEditedContent(comment.content);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingCommentId(null);
+    setEditedContent("");
+  };
+
+  const handleSaveEdit = async (commentId: number) => {
+    const result = await editComment(commentId, editedContent);
+    if (result.status === "success") {
+      setEditingCommentId(null);
+      setEditedContent("");
+      router.refresh();
+    }
+  };
+
+  const handleDelete = async (commentId: number) => {
+    const result = await deleteComment(commentId);
+    if (result.status === "success") {
+      router.refresh();
+    }
+  };
+
   return (
-    <div className="max-w-2xl mx-auto mt-10 px-4">
+    <div className="max-w-2xl mx-auto mt-8">
       {/* post info */}
-      <div className="bg-white rounded-lg shadow p-6 mb-8">
+      <div className="bg-white rounded-lg shadow border border-gray-200 p-6 mb-8">
         <p className="text-sm text-gray-500 mb-1">
           By {name} {surname}
         </p>
@@ -35,11 +74,24 @@ export default function PostInformation({
             Categories: {categories}
           </p>
         )}
+
+        {user?.id === authorId && (
+          <div className="mt-4">
+            <Link
+              href={`/posts/edit/${postId}`}
+              className="text-sm text-gray-700 underline hover:text-gray-900"
+            >
+              Edit
+            </Link>
+          </div>
+        )}
       </div>
-      {/* create comment form */}
-      <AddNewCommentForm postId={postId} />
-      {/* comments */}
-      <div className="bg-gray-50 rounded-lg shadow p-6">
+
+      {/* add new comment form */}
+      <AddNewCommentForm postId={postId} user={user} />
+
+      {/* comments section */}
+      <div className="bg-gray-50 rounded-lg shadow border border-gray-200 p-6 mt-8">
         <h2 className="text-lg font-semibold text-gray-800 mb-4">
           Comments ({comments.length})
         </h2>
@@ -50,10 +102,57 @@ export default function PostInformation({
           <ul className="space-y-4">
             {comments.map((comment) => (
               <li key={comment.id} className="border-b pb-2">
-                <p className="text-sm text-gray-700">{comment.content}</p>
-                <p className="text-xs text-gray-500 mt-1">
-                  By {comment.name} {comment.surname}
-                </p>
+                {editingCommentId === comment.id ? (
+                  <>
+                    <textarea
+                      className="w-full border border-gray-300 rounded px-2 py-1 mb-2 text-sm"
+                      value={editedContent}
+                      onChange={(e) => setEditedContent(e.target.value)}
+                    />
+                    <div className="flex gap-2 mb-2">
+                      <button
+                        onClick={() => handleSaveEdit(comment.id)}
+                        className="text-sm text-white bg-gray-700 px-2 py-1 rounded hover:bg-gray-800 hover:cursor-pointer"
+                      >
+                        Save
+                      </button>
+                      <button
+                        onClick={handleCancelEdit}
+                        className="text-sm text-gray-600 border px-2 py-1 rounded hover:bg-gray-100 hover:cursor-pointer"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="flex justify-between items-start">
+                      <p className="text-sm text-gray-700 flex-1">
+                        {comment.content}
+                      </p>
+
+                      {user?.id === comment.author_id && (
+                        <div className="flex gap-2 ml-4 mt-1">
+                          <button
+                            onClick={() => handleStartEdit(comment)}
+                            className="text-xs text-gray-700 underline hover:text-gray-900 hover:cursor-pointer"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => handleDelete(comment.id)}
+                            className="text-xs text-red-600 underline hover:text-red-700 hover:cursor-pointer"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1 mb-1">
+                      By {comment.name} {comment.surname}
+                    </p>
+                  </>
+                )}
               </li>
             ))}
           </ul>
