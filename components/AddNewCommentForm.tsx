@@ -4,15 +4,8 @@ import { useState, useEffect } from "react";
 import { useActionState } from "react";
 import { useRouter } from "next/navigation";
 import { addNewComment } from "../actions/actions";
-import { User } from "@supabase/supabase-js";
 
-export default function AddNewCommentForm({
-  postId,
-  user,
-}: {
-  postId: number;
-  user: User | null;
-}) {
+export default function AddNewCommentForm({ postId }: { postId: number }) {
   const [state, formAction, isPending] = useActionState(addNewComment, null);
   const [content, setContent] = useState("");
   const router = useRouter();

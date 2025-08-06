@@ -41,6 +41,7 @@ export default async function EditPostPage({
         title={post.title}
         authorId={post.author_id}
         content={post.content}
+        createdAt={post.created_at}
         categories={post.categories}
         name={post.name}
         surname={post.surname}

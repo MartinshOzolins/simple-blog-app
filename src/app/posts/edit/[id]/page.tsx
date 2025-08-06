@@ -27,7 +27,6 @@ export default async function EditPostPage({
     .eq("author_id", user.id)
     .single<Post>();
 
-  // user doesn't own this post
   if (fetchError || !post) {
     redirect("/");
   }
@@ -36,7 +35,6 @@ export default async function EditPostPage({
     <div className="max-w-2xl mx-auto mt-10 p-4">
       <h1 className="text-2xl font-bold mb-4">Edit your post</h1>
 
-      {/* client side component that handles inputs and sends formData to server action once submitted*/}
       <EditPostForm
         postId={id}
         title={post?.title}

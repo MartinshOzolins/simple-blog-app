@@ -18,7 +18,11 @@ export default function Page() {
     setErrorMsg("");
     setMessage("");
 
-    const { data, error } = await supabaseBrowserClient.auth.signUp({
+    setEmail("");
+    setPassword("");
+    setName("");
+    setSurname("");
+    const { error } = await supabaseBrowserClient.auth.signUp({
       email,
       password,
       options: {

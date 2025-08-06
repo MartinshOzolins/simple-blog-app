@@ -62,19 +62,19 @@ export default function Header() {
           >
             Posts
           </Link>
-          <Link
-            href="/posts/create"
-            className="hover:text-black transition hover:cursor-pointer"
-          >
-            Create
-          </Link>
+
           {user && (
-            <Link
-              href="/dashboard"
-              className="hover:text-black transition hover:cursor-pointer"
-            >
-              My posts
-            </Link>
+            <>
+              <Link href="/posts/create" prefetch={false}>
+                Create
+              </Link>
+              <Link
+                href="/dashboard"
+                className="hover:text-black transition hover:cursor-pointer"
+              >
+                My posts
+              </Link>
+            </>
           )}
           {!user ? (
             <Link

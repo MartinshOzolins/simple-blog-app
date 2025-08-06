@@ -25,7 +25,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="w-full max-w-3xl mx-auto px-4 py-10">
-      <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-8 text-gray-800">
+      <h1 className="text-2xl sm:text-2xl md:text-3xl font-bold mb-8 text-gray-800">
         Your posts
       </h1>
 
@@ -36,7 +36,7 @@ export default async function DashboardPage() {
               key={post.id}
               className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm"
             >
-              <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-800 mb-2 break-words">
+              <h2 className="text-lg sm:text-xl md:text-xl font-semibold text-gray-800 mb-2 break-words">
                 {post.title}
               </h2>
               <p className="text-sm sm:text-base md:text-lg text-gray-600 mb-4 break-words">

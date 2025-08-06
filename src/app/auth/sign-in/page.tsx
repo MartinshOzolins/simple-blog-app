@@ -13,7 +13,7 @@ export default function Page() {
   const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // Prevent default form submit
+    e.preventDefault();
     setErrorMsg("");
 
     const { error } = await supabaseBrowserClient.auth.signInWithPassword({

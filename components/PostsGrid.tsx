@@ -58,6 +58,13 @@ export default function PostGrid({ posts }: { posts: Post[] }) {
               <p className="text-xs text-gray-500 mb-2 font-medium">
                 {post?.name} {post?.surname}
               </p>
+              <p className="text-xs text-gray-400 mb-1">
+                {new Date(post.created_at).toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                })}
+              </p>
               <h2 className="text-lg font-semibold text-gray-900 mb-2 leading-snug">
                 {post.title}
               </h2>

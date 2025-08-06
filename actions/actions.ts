@@ -229,7 +229,7 @@ export async function addNewComment(
   if (!user) {
     return {
       status: "failure",
-      message: "You must be logged in to create a post.",
+      message: "You must be logged in to add a comment.",
     };
   }
 

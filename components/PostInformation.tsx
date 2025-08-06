@@ -14,6 +14,7 @@ export default function PostInformation({
   content,
   categories,
   authorId,
+  createdAt,
   name,
   surname,
   comments,
@@ -24,6 +25,7 @@ export default function PostInformation({
   content: string;
   categories?: string;
   authorId: string;
+  createdAt: string;
   name?: string;
   surname?: string;
   comments: Comment[];
@@ -67,6 +69,13 @@ export default function PostInformation({
         <p className="text-sm text-gray-500 mb-1">
           By {name} {surname}
         </p>
+        <p className="text-xs text-gray-400 mb-1">
+          {new Date(createdAt).toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+          })}
+        </p>
         <h1 className="text-2xl font-bold text-gray-900 mb-4">{title}</h1>
         <p className="text-gray-800 whitespace-pre-line mb-4">{content}</p>
         {categories && (
@@ -88,7 +97,7 @@ export default function PostInformation({
       </div>
 
       {/* add new comment form */}
-      <AddNewCommentForm postId={postId} user={user} />
+      <AddNewCommentForm postId={postId} />
 
       {/* comments section */}
       <div className="bg-gray-50 rounded-lg shadow border border-gray-200 p-6 mt-8">
