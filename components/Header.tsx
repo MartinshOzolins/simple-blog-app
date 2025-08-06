@@ -63,12 +63,14 @@ export default function Header() {
             Posts
           </Link>
 
-          <Link
-            href="/posts/create"
+          <button
             className="hover:text-black hover:underline transition hover:cursor-pointer"
+            onClick={() => {
+              router.push("/posts/create");
+            }}
           >
             Create
-          </Link>
+          </button>
 
           {user && (
             <Link
