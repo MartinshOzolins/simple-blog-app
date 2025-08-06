@@ -9,7 +9,7 @@ export const config = {
   matcher: [
     "/dashboard",
     "/dashboard/:path*",
-    "/posts/add",
+    "/posts/create",
     "/posts/edit",
     "/posts/edit/:path*",
     "/auth/sign-in",

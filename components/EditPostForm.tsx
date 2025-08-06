@@ -13,7 +13,7 @@ export default function EditPostForm({
   postId: string;
   title: string;
   content: string;
-  categories: string;
+  categories?: string;
 }) {
   const [state, formAction, isPending] = useActionState(editPost, null);
 
