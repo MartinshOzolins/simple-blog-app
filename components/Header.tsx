@@ -56,18 +56,15 @@ export default function Header() {
         </Link>
 
         <nav className="flex items-center gap-2 sm:gap-4 text-sm md:text-base font-medium text-gray-700">
-          <Link
-            href="/"
-            className="hover:text-black transition hover:cursor-pointer"
+          <Link href="/">Posts</Link>
+          <button
+            onClick={() => router.push("/posts/create")}
+            className="flex items-center gap-2 sm:gap-4 text-sm md:text-base font-medium text-gray-700 hover:cursor-pointer"
           >
-            Posts
-          </Link>
-
+            Create
+          </button>
           {user && (
             <>
-              <Link href="/posts/create" prefetch={false}>
-                Create
-              </Link>
               <Link
                 href="/dashboard"
                 className="hover:text-black transition hover:cursor-pointer"
