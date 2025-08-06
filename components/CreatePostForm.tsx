@@ -87,7 +87,7 @@ export default function CreatePostForm() {
           <button
             type="submit"
             disabled={isPending}
-            className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-800 disabled:opacity-50"
+            className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-800 disabled:opacity-50 hover:cursor-pointer"
           >
             {isPending ? "Publishing..." : "Publish"}
           </button>

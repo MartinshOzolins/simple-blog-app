@@ -65,7 +65,20 @@ export default function Page() {
   return (
     <div className="mx-auto mt-20 max-w-md p-6">
       <h1 className="mb-6 text-2xl font-bold">Sign Up</h1>
-
+      {message && (
+        <div className="mb-5 flex flex-col justify-center space-y-2">
+          <p className="text-center text-sm text-green-600">{message}</p>
+          <Link
+            href="/auth/sign-in"
+            className="mx-auto rounded bg-gray-600 px-2 py-1 text-white hover:bg-gray-700 hover:cursor-pointer"
+          >
+            Sign In
+          </Link>
+        </div>
+      )}
+      {errorMsg && (
+        <p className="mt-4 text-center text-sm text-red-600">{errorMsg}</p>
+      )}
       <form onSubmit={handleSignUp}>
         <label htmlFor="name">First Name</label>
         <input
@@ -117,22 +130,6 @@ export default function Page() {
           Sign in
         </Link>
       </p>
-
-      {errorMsg && (
-        <p className="mt-4 text-center text-sm text-red-600">{errorMsg}</p>
-      )}
-
-      {message && (
-        <>
-          <p className="mt-4 text-center text-sm text-green-600">{message}</p>
-          <Link
-            href="/auth/sign-in"
-            className="block text-center text-gray-700 underline mt-2"
-          >
-            Go to Sign In
-          </Link>
-        </>
-      )}
     </div>
   );
 }

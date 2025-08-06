@@ -56,34 +56,40 @@ export default function Header() {
         </Link>
 
         <nav className="flex items-center gap-2 sm:gap-4 text-sm md:text-base font-medium text-gray-700">
-          <Link href="/">Posts</Link>
-          <button
-            onClick={() => router.push("/posts/create")}
-            className="flex items-center gap-2 sm:gap-4 text-sm md:text-base font-medium text-gray-700 hover:cursor-pointer"
+          <Link
+            href="/"
+            className="hover:text-black hover:underline transition hover:cursor-pointer"
+          >
+            Posts
+          </Link>
+
+          <Link
+            href="/posts/create"
+            className="hover:text-black hover:underline transition hover:cursor-pointer"
           >
             Create
-          </button>
+          </Link>
+
           {user && (
-            <>
-              <Link
-                href="/dashboard"
-                className="hover:text-black transition hover:cursor-pointer"
-              >
-                My posts
-              </Link>
-            </>
+            <Link
+              href="/dashboard"
+              className="hover:text-black hover:underline transition hover:cursor-pointer"
+            >
+              My posts
+            </Link>
           )}
+
           {!user ? (
             <Link
               href="/auth/sign-in"
-              className="hover:text-black transition hover:cursor-pointer"
+              className="hover:text-black hover:underline transition hover:cursor-pointer"
             >
               Sign in
             </Link>
           ) : (
             <button
               onClick={handleSignOut}
-              className="text-red-600 hover:text-red-700 transition hover:cursor-pointer"
+              className="text-red-600 hover:text-red-700 hover:underline transition hover:cursor-pointer"
             >
               Sign out
             </button>
