@@ -72,7 +72,7 @@ export default function PostGrid({ posts }: { posts: Post[] }) {
                 {post.content.slice(0, 120)}...
               </p>
               {post.categories && (
-                <p className="text-xs text-gray-500 italic">
+                <p className="text-xs text-gray-500 italic truncate">
                   Categories: {post.categories}
                 </p>
               )}
