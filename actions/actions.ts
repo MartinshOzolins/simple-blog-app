@@ -216,7 +216,7 @@ export async function addNewComment(
   if (!validator.isLength(sanitizedContent, { min: 2, max: 300 })) {
     return {
       status: "failure",
-      message: "Content must be at least 2 characters.",
+      message: "Content must be between 2 and 300 characters.",
     };
   }
 
