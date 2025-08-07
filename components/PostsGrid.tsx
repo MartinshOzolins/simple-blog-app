@@ -65,7 +65,7 @@ export default function PostGrid({ posts }: { posts: Post[] }) {
                   year: "numeric",
                 })}
               </p>
-              <h2 className="text-lg font-semibold text-gray-900 mb-2 leading-snug">
+              <h2 className="text-lg font-semibold text-gray-900 mb-2 leading-snug truncate">
                 {post.title}
               </h2>
               <p className="text-sm text-gray-700 mb-3 line-clamp-3">
