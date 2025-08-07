@@ -143,7 +143,7 @@ export default function PostInformation({
                       </p>
 
                       {user?.id === comment.author_id && (
-                        <div className="flex gap-2 ml-4 mt-1">
+                        <div className="flex gap-2 ml-4 mt-1 pr-2">
                           <button
                             onClick={() => handleStartEdit(comment)}
                             className="text-xs text-gray-700 underline hover:text-gray-900 hover:cursor-pointer"
