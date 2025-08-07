@@ -83,7 +83,7 @@ export default function PostInformation({
           {content}
         </p>
         {categories && (
-          <p className="text-sm text-gray-500 italic">
+          <p className="text-sm text-gray-500 italic break-words">
             Categories: {categories}
           </p>
         )}
@@ -140,12 +140,12 @@ export default function PostInformation({
                 ) : (
                   <>
                     <div className="flex justify-between items-start">
-                      <p className="text-sm text-gray-700 flex-1 break-words">
+                      <p className="text-sm text-gray-700 flex-1 min-w-0 break-words">
                         {comment.content}
                       </p>
 
                       {user?.id === comment.author_id && (
-                        <div className="flex gap-2 ml-4 mt-1 pr-2">
+                        <div className="flex gap-2 ml-4 mt-1 pr-2 shrink-0">
                           <button
                             onClick={() => handleStartEdit(comment)}
                             className="text-xs text-gray-700 underline hover:text-gray-900 hover:cursor-pointer"
@@ -161,6 +161,7 @@ export default function PostInformation({
                         </div>
                       )}
                     </div>
+
                     <p className="text-xs text-gray-500 mt-1 mb-1 ">
                       By {comment.name} {comment.surname}
                     </p>
